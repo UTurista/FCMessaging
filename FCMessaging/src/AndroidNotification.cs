@@ -108,7 +108,7 @@ namespace UTurista.FCMessaging
             /// <summary>
             /// The sound to play when the device receives the notification. Supports "default" or the filename of a sound resource bundled in the app.
             /// </summary>
-            public Builder Sound(string sound)
+            public Builder Sound(string sound = "default")
             {
                 mSound = sound;
                 return this;
