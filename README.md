@@ -8,25 +8,17 @@ Note that if you want to use upstream messaging from your client applications, y
 
 ## Sending your first message
 
-Before you send your first message you need 2 things:
-- **A credential file given by Firebase**
+Before you send your first message you require a **credential file given by Firebase**:
   - In the Firebase console, open Settings > [Service Accounts](https://console.firebase.google.com/project/_/settings/serviceaccounts/adminsdk).
   - Click Generate New Private Key, and confirm by clicking Generate Key.
   - Download and save the file to a secure location
-- **Your project identifier**
-  - Found in the Firebase console or in the previous downloaded file
-```
-{
-  "type": "service_account",
-  "project_id": "<your-project-identifier>",
-  (...)
-}
 
-```
+
 Once you have your server key and credentials, instatiate a client object with:
 ```c#
-FCMClient client = new FCMClient("your-project-identifier", "path-to-credential-file");
+FCMClient client = new FCMClient("relative-path-to-credential-file");
 ```
+
 Create a simle message and send it:
 ```c#
 Message message = new Message

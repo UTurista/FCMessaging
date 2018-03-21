@@ -2,15 +2,19 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <ApplicationIcon />
     <StartupObject />
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>UTurista</Authors>
     <Company>UTurista</Company>
     <FileVersion>0.0.1.0</FileVersion>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
-    <Version>0.0.1</Version>
+    <AssemblyVersion>0.0.2.0</AssemblyVersion>
+    <Version>0.0.2</Version>
+    <Description>C# Implementation of the new HTTP v1 API protocol of Firebase Cloud Messaging (FCM)</Description>
+    <PackageProjectUrl>https://github.com/UTurista/FCMessaging</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/UTurista/FCMessaging</RepositoryUrl>
+    <PackageTags>fcm cloud</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

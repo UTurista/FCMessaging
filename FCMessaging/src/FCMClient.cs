@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -21,8 +22,9 @@ namespace UTurista.FCMessaging
         private readonly string mCredentialsFile;
 
 
-        public FCMClient(string projectId, string file = "service-account.json")
+        public FCMClient(string file = "service-account.json")
         {
+            string projectId = GetProjectId(file);
             mFirebaseEndpoint = new Uri(string.Format(FCM_URI, projectId));
             mCredentialsFile = file;
 
@@ -90,6 +92,25 @@ namespace UTurista.FCMessaging
             return token;
         }
 
+        private static string GetProjectId(string file)
+        {
+            using (StreamReader stream = File.OpenText(file))
+            {
+                Credential credentialParameters;
+                try
+                {
+                    JsonSerializer serializer = new JsonSerializer();
+                    credentialParameters = (Credential)serializer.Deserialize(stream, typeof(Credential));
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Error deserializing JSON credential data.", e);
+                }
+                return credentialParameters.ProjectId;
+            }
+        }
+
+
         private class RequestPayload
         {
             [JsonProperty("validate_only")]
@@ -97,6 +118,12 @@ namespace UTurista.FCMessaging
 
             [JsonProperty("message")]
             public Message Message { get; set; }
+        }
+
+        private class Credential : JsonCredentialParameters
+        {
+            [JsonProperty("project_id")]
+            public string ProjectId { get; set; }
         }
     }
 }
