@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Drawing;
 
 namespace UTurista.FCMessaging
 {
@@ -6,67 +7,47 @@ namespace UTurista.FCMessaging
     public class AndroidNotification
     {
         [JsonProperty("title")]
-        public string Title { get; }
+        public string Title { get; internal set; }
 
         [JsonProperty("body")]
-        public string Body { get;  }
+        public string Body { get; internal set; }
 
         [JsonProperty("icon")]
-        public string Icon { get; }
+        public string Icon { get; internal set; }
 
         [JsonProperty("color")]
-        public string Color { get; }
+        public string Color { get; internal set; }
 
         [JsonProperty("sound")]
-        public string Sound { get;  }
+        public string Sound { get; internal set; }
 
         [JsonProperty("tag")]
-        public string Tag { get;}
+        public string Tag { get; internal set; }
 
         [JsonProperty("click_action")]
-        public string Action { get; }
+        public string Action { get; internal set; }
 
         [JsonProperty("body_loc_key")]
-        public string LocalizedBody { get; }
+        public string LocalizedBody { get; internal set; }
 
         [JsonProperty("body_loc_args")]
-        public string[] LocalizedBodyArgs { get; }
+        public string[] LocalizedBodyArgs { get; internal set; }
 
         [JsonProperty("title_loc_key")]
-        public string LocalizedTitle { get;  }
+        public string LocalizedTitle { get; internal set; }
 
         [JsonProperty("title_loc_args")]
-        public string[] LocalizedTitleArgs { get;  }
+        public string[] LocalizedTitleArgs { get; internal set; }
 
-        public AndroidNotification(Builder builder)
+        internal AndroidNotification()
         {
-            Title = builder.mTitle;
-            Body = builder.mBody;
-            Icon = builder.mIcon;
-            Color = builder.mColor;
-            Sound = builder.mSound;
-            Tag = builder.mTag;
-            Action = builder.mAction;
-            LocalizedBody = builder.mLocalizedBody;
-            LocalizedBodyArgs = builder.mLocalizedBodyArgs;
-            LocalizedTitle = builder.mLocalizedTitle;
-            LocalizedTitleArgs = builder.mLocalizedTitleArgs;
+            // Only the builder can instantiate this class
         }
 
 
         public class Builder
         {
-            internal string mTitle;
-            internal string mBody;
-            internal string mIcon;
-            internal string mColor;
-            internal string mSound;
-            internal string mTag;
-            internal string mAction;
-            internal string mLocalizedBody;
-            internal string[] mLocalizedBodyArgs;
-            internal string mLocalizedTitle;
-            internal string[] mLocalizedTitleArgs;
+            AndroidNotification mNotification = new AndroidNotification();
 
 
             /// <summary>
@@ -74,7 +55,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Title(string title)
             {
-                mTitle = title;
+                mNotification.Title = title;
                 return this;
             }
 
@@ -83,7 +64,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Body(string body)
             {
-                mBody = body;
+                mNotification.Body = body;
                 return this;
             }
 
@@ -92,16 +73,16 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Icon(string body)
             {
-                mIcon = body;
+                mNotification.Icon = body;
                 return this;
             }
 
             /// <summary>
             /// The notification's icon color
             /// </summary>
-            public Builder Color(byte red, byte green, byte blue)
+            public Builder Color(Color color)
             {
-                mColor = string.Format("#{0:X2}{1:X2}{2:X2}", red, green, blue);
+                mNotification.Color = string.Format("#{0:X2}{1:X2}{2:X2}", color.R, color.G, color.B);
                 return this;
             }
 
@@ -110,7 +91,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Sound(string sound = "default")
             {
-                mSound = sound;
+                mNotification.Sound = sound;
                 return this;
             }
 
@@ -119,7 +100,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Tag(string tag)
             {
-                mTag = tag;
+                mNotification.Tag = tag;
                 return this;
             }
 
@@ -128,7 +109,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Action(string action)
             {
-                mAction = action;
+                mNotification.Action = action;
                 return this;
             }
 
@@ -137,8 +118,8 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder LocalizedBody(string body, params string[] args)
             {
-                mLocalizedBody = body;
-                mLocalizedBodyArgs = args;
+                mNotification.LocalizedBody = body;
+                mNotification.LocalizedBodyArgs = args;
                 return this;
             }
 
@@ -147,14 +128,14 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder LocalizedTitle(string title, params string[] args)
             {
-                mLocalizedTitle = title;
-                mLocalizedTitleArgs = args;
+                mNotification.LocalizedTitle = title;
+                mNotification.LocalizedTitleArgs = args;
                 return this;
             }
 
             public AndroidNotification Build()
             {
-                return new AndroidNotification(this);
+                return mNotification;
             }
         }
     }
