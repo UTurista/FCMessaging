@@ -71,7 +71,7 @@ namespace UTurista.FCMessaging
 
         public class Builder
         {
-            private static readonly Regex TOPIC_REGEX = new Regex("^[a-zA-Z0-9-_.~%]+$");
+            private static readonly Regex TOPIC_REGEX = new Regex("^[a-zA-Z0-9-_.~%/]+$");
 
             internal Dictionary<string, string> mData = new Dictionary<string, string>();
             internal Notification mNotification;
