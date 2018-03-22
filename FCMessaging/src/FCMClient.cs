@@ -66,9 +66,9 @@ namespace UTurista.FCMessaging
                     {
                         //TODO: handle retry-timeout for 500 messages
                         var errorMessage = await result.Content.ReadAsStringAsync();
-
+                        Error error = JsonConvert.DeserializeObject<Error>(errorMessage);
                         LOG.Error(errorMessage);
-                        throw new Exception(errorMessage);
+                        throw new FcmException(error);
                     }
 
                     // As per documentation: "If successful, the response body contains an instance of Message"
