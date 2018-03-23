@@ -64,6 +64,18 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder TimeToLive(TimeSpan ttl)
             {
+
+                // The maximum time to live supported is 4 weeks
+                if (ttl.CompareTo(TimeSpan.FromDays(28)) > 0)
+                {
+                    // Default value is 4 weeks if not set
+                    // so we could set to 'null' but this might be misleading
+                    // so we put the max allowed
+                    ttl = TimeSpan.FromDays(28);
+                }
+
+                // we could send up to nine fractional digits representing the nanoseconds
+                // but who cares about nanosseconds, the server is gonna round anyways
                 mConfig.TimeToLive = String.Format("{0}s", ttl.TotalSeconds);
                 return this;
             }

@@ -64,10 +64,9 @@ namespace UTurista.FCMessaging
 
                     if (result.StatusCode != System.Net.HttpStatusCode.OK)
                     {
-                        //TODO: handle retry-timeout for 500 messages
                         var errorMessage = await result.Content.ReadAsStringAsync();
                         Error error = JsonConvert.DeserializeObject<Error>(errorMessage);
-                        LOG.Error(errorMessage);
+
                         throw new FcmException(error);
                     }
 
