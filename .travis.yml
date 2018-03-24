@@ -7,4 +7,4 @@ script:
 - dotnet test FCMessagingTests/FCMessagingTests.csproj
 before_install:
 - openssl aes-256-cbc -K $encrypted_81ea4cc52d23_key -iv $encrypted_81ea4cc52d23_iv
-  -in credentials.json.enc -out credentials.json -d
+  -in FCMessagingTests/credentials.json.enc -out FCMessagingTests/credentials.json -d
