@@ -2,7 +2,9 @@ language: csharp
 solution: FCMessaging.sln
 mono: none
 dotnet: 2.0.0
-
 script:
- - dotnet build
- - dotnet test FCMessagingTests/FCMessagingTests.csproj
+- dotnet build
+- dotnet test FCMessagingTests/FCMessagingTests.csproj
+before_install:
+- openssl aes-256-cbc -K $encrypted_81ea4cc52d23_key -iv $encrypted_81ea4cc52d23_iv
+  -in credentials.json.enc -out credentials.json -d
