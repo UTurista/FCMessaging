@@ -77,6 +77,103 @@ namespace UTurista.FCMessaging
     }
 
 
+
+    /// <summary>
+    /// All of the gRPC error codes defined in google.rpc.Code
+    /// </summary>
+    /// 
+    /// <source>
+    /// https://cloud.google.com/apis/design/errors#error_codes
+    /// </source>
+    public enum ErrorCode
+    {
+        /// <summary>
+        /// No error.
+        /// </summary>
+        OK = 200,
+
+        /// <summary>
+        /// Client specified an invalid argument. Check error message and error details for more information.
+        /// </summary>
+        INVALID_ARGUMENT = 400,
+
+        /// <summary>
+        /// Request can not be executed in the current system state, such as deleting a non-empty directory.
+        /// </summary>
+        FAILED_PRECONDITION = 400,
+
+        /// <summary>
+        /// Client specified an invalid range.
+        /// </summary>
+        OUT_OF_RANGE = 400,
+
+        /// <summary>
+        /// Request not authenticated due to missing, invalid, or expired OAuth token.
+        /// </summary>
+        UNAUTHENTICATED = 401,
+
+        /// <summary>
+        /// Client does not have sufficient permission. This can happen because the OAuth token does not have the right scopes, the client doesn't have permission, or the API has not been enabled for the client project.
+        /// </summary>
+        PERMISSION_DENIED = 403,
+
+        /// <summary>
+        /// A specified resource is not found, or the request is rejected by undisclosed reasons, such as whitelisting.
+        /// </summary>
+        NOT_FOUND = 404,
+
+        /// <summary>
+        /// Concurrency conflict, such as read-modify-write conflict.
+        /// </summary>
+        ABORTED = 409,
+
+        /// <summary>
+        /// The resource that a client tried to create already exists.
+        /// </summary>
+        ALREADY_EXISTS = 409,
+
+        /// <summary>
+        /// Either out of resource quota or reaching rate limiting. The client should look for google.rpc.QuotaFailure error detail for more information.
+        /// </summary>
+        RESOURCE_EXHAUSTED = 429,
+
+        /// <summary>
+        /// Request cancelled by the client.
+        /// </summary>
+        CANCELLED = 499,
+
+        /// <summary>
+        /// Unrecoverable data loss or data corruption. The client should report the error to the user.
+        /// </summary>
+        DATA_LOSS = 500,
+
+        /// <summary>
+        /// Unknown server error. Typically a server bug.
+        /// </summary>
+        UNKNOWN = 500,
+
+        /// <summary>
+        /// Internal server error. Typically a server bug.
+        /// </summary>
+        INTERNAL = 500,
+
+        /// <summary>
+        /// API method not implemented by the server.
+        /// </summary>
+        NOT_IMPLEMENTED = 501,
+
+        /// <summary>
+        /// Service unavailable. Typically the server is down.
+        /// </summary>
+        UNAVAILABLE = 503,
+
+        /// <summary>
+        /// Request deadline exceeded. This will happen only if the caller sets a deadline that is shorter than the method's default deadline (i.e. requested deadline is not enough for the server to process the request) and the request did not finish within the deadline.
+        /// </summary>
+        DEADLINE_EXCEEDED = 504
+    }
+
+
     /// <summary>
     /// Error codes for FCM failure conditions.
     /// </summary>
@@ -84,7 +181,7 @@ namespace UTurista.FCMessaging
     /// <source>
     /// https://firebase.google.com/docs/reference/fcm/rest/v1/ErrorCode
     /// </source>
-    public enum ErrorCode
+    public enum FcmErrorCode
     {
         /// <summary>
         /// No more information is available about this error.
