@@ -5,7 +5,12 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FCMessaging", "FCMessaging\FCMessaging.csproj", "{1F02BE65-EE4A-4832-AD35-4D617774C80B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FCMessagingTests", "FCMessagingTests\FCMessagingTests.csproj", "{BE0FEA71-D368-4BAA-A773-72242DB8FC99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FCMessagingTests", "FCMessagingTests\FCMessagingTests.csproj", "{BE0FEA71-D368-4BAA-A773-72242DB8FC99}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6A9B53A6-1941-42D8-9EC4-366C0F99A634}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

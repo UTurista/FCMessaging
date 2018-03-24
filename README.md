@@ -1,3 +1,6 @@
+[![NuGet version](https://badge.fury.io/nu/FCMessaging.svg)](https://badge.fury.io/nu/FCMessaging)
+[![Build Status](https://travis-ci.org/UTurista/FCMessaging.svg?branch=develop)](https://travis-ci.org/UTurista/FCMessaging)
+
 # FCMessaging
 C# Implementation of the new [HTTP v1 API protocol](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages) of Firebase Cloud Messaging (FCM) which is:
 >the most up to date, with more secure authorization and flexible cross-platform messaging capabilities
