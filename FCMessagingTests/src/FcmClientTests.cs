@@ -16,7 +16,7 @@ namespace FCMessagingTests.src
             "FCMClient must throw error if credential files is inexistente")]
         public void LoadWrongCredentials_NoArguments()
         {
-            FCMClient client = new FCMClient();
+            FcmClient client = new FcmClient();
         }
 
         [TestMethod]
@@ -24,20 +24,20 @@ namespace FCMessagingTests.src
             "FCMClient must throw error if credential files is inexistente")]
         public void LoadWrongCredentials_BadArguments()
         {
-            FCMClient client = new FCMClient("a_bad_file.json");
+            FcmClient client = new FcmClient("a_bad_file.json");
         }
 
         [TestMethod]
         public void LoadCorrectCredentials()
         {
-            FCMClient client = new FCMClient("credentials.json");
+            FcmClient client = new FcmClient("credentials.json");
         }
 
 
         [TestMethod]
         public void SimpleSend()
         {
-            FCMClient client = new FCMClient("credentials.json");
+            FcmClient client = new FcmClient("credentials.json");
 
             var message = new Message
                 .Builder()
