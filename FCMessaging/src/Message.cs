@@ -10,31 +10,31 @@ namespace UTurista.FCMessaging
     public class Message
     {
         [JsonProperty("name")]
-        public string Name { get; }
+        public string Name { get; internal set; }
 
         [JsonProperty("data")]
-        public Dictionary<string, string> Data { get; }
+        public Dictionary<string, string> Data { get; internal set; }
 
         [JsonProperty("notification")]
-        public Notification Notification { get; }
+        public Notification Notification { get; internal set; }
 
         [JsonProperty("android")]
-        public AndroidConfig Android { get;}
+        public AndroidConfig Android { get; internal set; }
 
         [JsonProperty("webpush")]
-        public WebpushConfig Web { get; }
+        public WebpushConfig Web { get; internal set; }
 
         [JsonProperty("apns")]
-        public ApnsConfig Ios { get; }
+        public ApnsConfig Ios { get; internal set; }
 
         [JsonProperty("token")]
-        public string Token { get;  }
+        public string Token { get; internal set; }
 
         [JsonProperty("topic")]
-        public string Topic { get;  }
+        public string Topic { get; internal set; }
 
         [JsonProperty("condition")]
-        public string Condition { get; }
+        public string Condition { get; internal set; }
 
 
         [JsonConstructor]
@@ -44,68 +44,46 @@ namespace UTurista.FCMessaging
             Name = name;
         }
 
-        public Message(Builder builder)
+        internal Message()
         {
-            Notification = builder.mNotification;
-            Android = builder.mAndroid;
-            Web = builder.mWeb;
-            Ios = builder.mIos;
-
-            // Assert that there is only one target defined
-            if (new string[] { builder.mToken, builder.mTopic, builder.mCondition }.Where(x => !string.IsNullOrEmpty(x)).Count() != 1)
-            {
-                throw new Exception("Exactly one of token, topic or condition must be specified");
-            }
-
-            Token = builder.mToken;
-            Topic = builder.mTopic;
-            Condition = builder.mCondition;
-
-
-            if (builder.mData.Count > 0)
-            {
-                Data = builder.mData;
-            }
+            // Only the builder can instantiate this class
         }
 
 
         public class Builder
         {
-            private static readonly Regex TOPIC_REGEX = new Regex("^[a-zA-Z0-9-_.~%]+$");
+            private static readonly Regex TOPIC_REGEX = new Regex("^[a-zA-Z0-9-_.~%/]+$");
 
-            internal Dictionary<string, string> mData = new Dictionary<string, string>();
-            internal Notification mNotification;
-            internal AndroidConfig mAndroid;
-            internal WebpushConfig mWeb;
-            internal ApnsConfig mIos;
-            internal string mToken;
-            internal string mTopic;
-            internal string mCondition;
+            private Message mMessage = new Message();
 
 
             public Builder AddData(string key, string value)
             {
-                mData.Add(key, value);
+                if (mMessage.Data == null)
+                {
+                    mMessage.Data = new Dictionary<string, string>();
+                }
+                mMessage.Data.Add(key, value);
                 return this;
             }
 
 
             public Builder SetData(Dictionary<string, string> data)
             {
-                mData = data;
+                mMessage.Data = data;
                 return this;
             }
 
 
             public Builder Title(string title)
             {
-                if (mNotification == null)
+                if (mMessage.Notification == null)
                 {
-                    mNotification = new Notification(title, null);
+                    mMessage.Notification = new Notification(title, null);
                 }
                 else
                 {
-                    mNotification = new Notification(title, mNotification.Body);
+                    mMessage.Notification = new Notification(title, mMessage.Notification.Body);
                 }
 
 
@@ -115,13 +93,13 @@ namespace UTurista.FCMessaging
 
             public Builder Body(string body)
             {
-                if (mNotification == null)
+                if (mMessage.Notification == null)
                 {
-                    mNotification = new Notification(null, body);
+                    mMessage.Notification = new Notification(null, body);
                 }
                 else
                 {
-                    mNotification = new Notification(mNotification.Title, body);
+                    mMessage.Notification = new Notification(mMessage.Notification.Title, body);
                 }
 
                 return this;
@@ -130,28 +108,28 @@ namespace UTurista.FCMessaging
 
             public Builder AndroidCfg(AndroidConfig config)
             {
-                mAndroid = config;
+                mMessage.Android = config;
                 return this;
             }
 
 
             public Builder IosCfg(ApnsConfig config)
             {
-                mIos = config;
+                mMessage.Ios = config;
                 return this;
             }
 
 
             public Builder WebCfg(WebpushConfig config)
             {
-                mWeb = config;
+                mMessage.Web = config;
                 return this;
             }
 
 
             public Builder ToDevice(string token)
             {
-                mToken = token;
+                mMessage.Token = token;
 
                 return this;
             }
@@ -162,7 +140,7 @@ namespace UTurista.FCMessaging
                 if (!IsTopicValid(topic))
                     throw new Exception("Topic must match " + TOPIC_REGEX);
 
-                mTopic = topic;
+                mMessage.Topic = topic;
 
                 return this;
             }
@@ -172,7 +150,7 @@ namespace UTurista.FCMessaging
             {
                 if (topics == null)
                 {
-                    mCondition = null;
+                    mMessage.Condition = null;
                     return this;
                 }
 
@@ -180,14 +158,14 @@ namespace UTurista.FCMessaging
                     throw new Exception("Topics must match " + TOPIC_REGEX);
 
                 topics = topics.Select(top => string.Format("'{0}' in topics", top)).ToArray();
-                mCondition = String.Join(" && ", topics);
+                mMessage.Condition = string.Join(" && ", topics);
 
                 return this;
             }
 
             public Builder ToCondition(string condition)
             {
-                mCondition = condition;
+                mMessage.Condition = condition;
 
                 return this;
             }
@@ -195,7 +173,14 @@ namespace UTurista.FCMessaging
 
             public Message Build()
             {
-                return new Message(this);
+                // Assert that there is only one target defined
+                if (new string[] { mMessage.Token, mMessage.Topic, mMessage.Condition }.Where(x => !string.IsNullOrEmpty(x)).Count() != 1)
+                {
+                    throw new Exception("Exactly one of token, topic or condition must be specified");
+                }
+
+
+                return mMessage;
             }
 
 

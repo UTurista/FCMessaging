@@ -18,62 +18,44 @@ namespace UTurista.FCMessaging
     public class AndroidConfig
     {
         [JsonProperty("collapse_key")]
-        public string CollapsedKey { get; }
+        public string CollapsedKey { get; internal set; }
 
         [JsonProperty("priority")]
-        public string Priority { get; }
+        public string Priority { get; internal set; }
 
         [JsonProperty("ttl")]
-        public string TimeToLive { get; }
+        public string TimeToLive { get; internal set; }
 
         [JsonProperty("restricted_package_name")]
-        public string PackageName { get; }
+        public string PackageName { get; internal set; }
 
         [JsonProperty("data")]
-        public Dictionary<string, string> Data { get; }
+        public Dictionary<string, string> Data { get; internal set; }
 
         [JsonProperty("notification")]
-        public AndroidNotification Notification { get; }
+        public AndroidNotification Notification { get; internal set; }
 
-        public AndroidConfig(Builder builder)
+        internal AndroidConfig()
         {
-            CollapsedKey = builder.mCollapseKey;
-            Priority = builder.mPriority;
-            PackageName = builder.mPackage;
-            Notification = builder.mNotification;
-
-            if (builder.mData.Count > 0)
-            {
-                Data = builder.mData;
-            }
-
-            if (builder.mTTL >= 0)
-            {
-                TimeToLive = String.Format("{0}s", builder.mTTL);
-            }
+            // Only the builder can instantiate this class
         }
 
         public class Builder
         {
-            internal string mCollapseKey;
-            internal string mPriority;
-            internal double mTTL = -1;
-            internal string mPackage;
-            internal Dictionary<string, string> mData = new Dictionary<string, string>();
-            internal AndroidNotification mNotification;
+           private AndroidConfig mConfig = new AndroidConfig();
 
             /// <summary>
             /// An identifier of a group of messages that can be collapsed, so that only the last message gets sent when delivery can be resumed
             /// </summary>
             public Builder CollapsedKey(string key)
             {
-                mCollapseKey = key;
+                mConfig.CollapsedKey = key;
                 return this;
             }
 
             public Builder Priority(AndroidMessagePriority priority)
             {
-                mPriority = priority.ToString().ToLowerInvariant(); ;
+                mConfig.Priority = priority.ToString().ToLowerInvariant(); ;
                 return this;
             }
 
@@ -82,7 +64,19 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder TimeToLive(TimeSpan ttl)
             {
-                mTTL = ttl.TotalSeconds;
+
+                // The maximum time to live supported is 4 weeks
+                if (ttl.CompareTo(TimeSpan.FromDays(28)) > 0)
+                {
+                    // Default value is 4 weeks if not set
+                    // so we could set to 'null' but this might be misleading
+                    // so we put the max allowed
+                    ttl = TimeSpan.FromDays(28);
+                }
+
+                // we could send up to nine fractional digits representing the nanoseconds
+                // but who cares about nanosseconds, the server is gonna round anyways
+                mConfig.TimeToLive = String.Format("{0}s", ttl.TotalSeconds);
                 return this;
             }
 
@@ -91,7 +85,7 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Package(string package)
             {
-                mPackage = package;
+                mConfig.PackageName = package;
                 return this;
             }
 
@@ -100,7 +94,12 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder AddData(string key, string value)
             {
-                mData.Add(key, value);
+                if (mConfig.Data == null)
+                {
+                    mConfig.Data = new Dictionary<string, string>();
+                }
+
+                mConfig.Data.Add(key, value);
                 return this;
             }
 
@@ -109,14 +108,14 @@ namespace UTurista.FCMessaging
             /// </summary>
             public Builder Notification(AndroidNotification notification)
             {
-                mNotification = notification;
+                mConfig.Notification = notification;
                 return this;
             }
 
 
             public AndroidConfig Build()
             {
-                return new AndroidConfig(this);
+                return mConfig;
             }
         }
     }

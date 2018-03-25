@@ -11,7 +11,14 @@ using System.Threading.Tasks;
 
 namespace UTurista.FCMessaging
 {
-    public class FCMClient
+    [Obsolete("Use FcmClient")]
+    public class FCMClient : FcmClient
+    {
+        public FCMClient(string file = "service-account.json") : base(file)
+        { }
+    }
+
+        public class FcmClient
     {
         private readonly Logger LOG = LogManager.GetCurrentClassLogger();
 
@@ -22,7 +29,7 @@ namespace UTurista.FCMessaging
         private readonly string mCredentialsFile;
 
 
-        public FCMClient(string file = "service-account.json")
+        public FcmClient(string file = "service-account.json")
         {
             string projectId = GetProjectId(file);
             mFirebaseEndpoint = new Uri(string.Format(FCM_URI, projectId));
@@ -64,11 +71,10 @@ namespace UTurista.FCMessaging
 
                     if (result.StatusCode != System.Net.HttpStatusCode.OK)
                     {
-                        //TODO: handle retry-timeout for 500 messages
                         var errorMessage = await result.Content.ReadAsStringAsync();
+                        Error error = JsonConvert.DeserializeObject<Error>(errorMessage);
 
-                        LOG.Error(errorMessage);
-                        throw new Exception(errorMessage);
+                        throw new FcmException(error);
                     }
 
                     // As per documentation: "If successful, the response body contains an instance of Message"
