@@ -31,6 +31,12 @@ namespace UTurista.FCMessaging
         return this;
       }
 
+      public Builder SetData(Dictionary<string, object> data)
+      {
+        config.Data = data;
+        return this;
+      }
+
       public ApnsPayload Build()
       {
         return config;

@@ -1,6 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using UTurista.FCMessaging;
 
 namespace FCMessagingTests
@@ -27,6 +28,18 @@ namespace FCMessagingTests
     public void SerializationTest_Data()
     {
       var config = new ApnsPayload.Builder().AddData("foo", "bar").Build();
+      var test = "{\"data\":{\"foo\":\"bar\"}}";
+      var actual = JsonConvert.SerializeObject(config, JSON_SETTINGS);
+
+      Assert.AreEqual(test, actual);
+    }
+
+
+
+    [TestMethod]
+    public void SerializationTest_SetData()
+    {
+      var config = new ApnsPayload.Builder().SetData(new Dictionary<string, object> { { "foo", "bar" } }).Build();
       var test = "{\"data\":{\"foo\":\"bar\"}}";
       var actual = JsonConvert.SerializeObject(config, JSON_SETTINGS);
 
